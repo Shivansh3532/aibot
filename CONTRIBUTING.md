@@ -15,7 +15,7 @@ python -m pip install -e .
 Before proposing a change:
 
 ```bash
-python -m py_compile claude_queue/*.py tests/test_*.py
+python -m compileall -q claude_queue tests
 python -m unittest discover -s tests -v
 claude-queue --version
 ```
