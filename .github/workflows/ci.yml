@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Compile
-        run: python -m py_compile claude_queue/*.py tests/test_*.py
+        run: python -m compileall -q claude_queue tests
       - name: Unit tests
         run: python -m unittest discover -s tests -v
       - name: Install package
