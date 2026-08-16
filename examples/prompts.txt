@@ -1,0 +1,11 @@
+# Inspect
+Inspect the repository. Identify broken tests, unfinished work, risky code, and the highest-value next steps. Do not modify files yet; produce a concrete execution plan.
+---
+# Implement
+Execute the plan completely. Keep changes focused, run the relevant tests after each meaningful step, and fix failures you introduce.
+---
+# Review
+Review the resulting diff as a senior maintainer. Find correctness, security, maintainability, and regression issues. Fix every issue you can verify.
+---
+# Verify
+Run the full available test suite and static checks. Keep iterating until the repository is clean or you can clearly explain a blocker that cannot be fixed locally.
