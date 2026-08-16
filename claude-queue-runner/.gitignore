@@ -1,0 +1,3 @@
+.claude-queue/
+__pycache__/
+*.pyc
