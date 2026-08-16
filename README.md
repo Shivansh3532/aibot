@@ -181,7 +181,7 @@ Run the full suite:
 
 ```bash
 python -m unittest discover -s tests -v
-python -m py_compile claude_queue/*.py tests/test_claude_queue.py
+python -m py_compile claude_queue/*.py tests/test_*.py
 ```
 
 The test suite uses fake Claude executables, so it does not consume Claude usage. It covers:
