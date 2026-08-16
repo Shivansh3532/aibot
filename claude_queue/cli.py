@@ -10,6 +10,17 @@ from .commands import (
 from .runner import command_remote, command_run
 
 
+def configure_console_streams():
+    """Keep CLI output from crashing on legacy Windows console encodings."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            try:
+                reconfigure(errors="backslashreplace")
+            except (OSError, ValueError):
+                pass
+
+
 def build_parser():
     p = argparse.ArgumentParser(
         prog="claude-queue",
@@ -77,6 +88,7 @@ def build_parser():
 
 
 def main(argv=None):
+    configure_console_streams()
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
