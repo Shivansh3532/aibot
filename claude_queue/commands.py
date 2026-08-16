@@ -24,10 +24,10 @@ def command_doctor(args):
     store = Store(args.state_dir)
     state = store.load()
     version = (cp.stdout or cp.stderr).strip().splitlines()[0]
-    print(f"Python: {sys.version.split()[0]} ✓")
-    print(f"Claude: {version} ✓")
-    print(f"Project: {project} ✓")
-    print(f"State: {store.root.resolve()} ✓")
+    print(f"Python: {sys.version.split()[0]} [ok]")
+    print(f"Claude: {version} [ok]")
+    print(f"Project: {project} [ok]")
+    print(f"State: {store.root.resolve()} [ok]")
     print(f"Queue items: {len(state.get('items', []))}")
     print("Ready. Authentication/workspace trust are checked by Claude when a real prompt starts.")
     return 0
