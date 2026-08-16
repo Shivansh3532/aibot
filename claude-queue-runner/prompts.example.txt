@@ -1,9 +1,0 @@
-Inspect the repository, run the existing tests, and summarize the current failures. Do not change files yet.
-
----
-
-Fix the failures you found. Keep changes focused and run the relevant tests after each fix.
-
----
-
-Review the completed changes for regressions, security issues, and missing edge cases. Fix anything you find, then run the full test suite.
