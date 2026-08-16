@@ -74,7 +74,7 @@ def command_run(args):
                         args.max_turns,
                         args.extra_arg,
                     )
-                    print(f"\n→ {item['id']} attempt {item['attempts']}: {item['prompt'][:120]}")
+                    print(f"\n> {item['id']} attempt {item['attempts']}: {item['prompt'][:120]}")
                     rc, stdout, stderr = run_claude(cmd, project, args.timeout)
                     parsed = parse_json_output(stdout)
                     update_session_from_output(state, parsed)
@@ -106,13 +106,13 @@ def command_run(args):
                             item["result"] = stdout.strip()
                         store.save(state)
                         result_preview = (item.get("result") or "completed").replace("\n", " ")[:180]
-                        print(f"✓ {item['id']} done: {result_preview}")
+                        print(f"[done] {item['id']}: {result_preview}")
                         break
 
                     if not state.get("session_started") and state.get("session_id") and session_exists_failure(combined):
                         state["session_started"] = True
                         store.save(state)
-                        print("↻ Claude reports this session already exists; retrying with --resume.")
+                        print("[retry] Claude reports this session already exists; retrying with --resume.")
                         continue
 
                     kind = classify_failure(combined)
@@ -122,7 +122,7 @@ def command_run(args):
 
                     if kind == "rate_limit":
                         wait = max(1, args.rate_limit_wait)
-                        print(f"⏸ Claude usage/rate limit detected. Keeping {item['id']} queued in-place and retrying in {wait}s.")
+                        print(f"[wait] Claude usage/rate limit detected. Keeping {item['id']} queued in-place and retrying in {wait}s.")
                         if not sleep_or_stop(wait):
                             item["status"] = "queued"
                             store.save(state)
@@ -132,7 +132,7 @@ def command_run(args):
                     if kind == "transient":
                         transient_failures += 1
                         wait = min(args.transient_max_wait, args.transient_wait * (2 ** (transient_failures - 1)))
-                        print(f"↻ Temporary Claude/service error. Retry {transient_failures} in {wait}s.")
+                        print(f"[retry] Temporary Claude/service error. Retry {transient_failures} in {wait}s.")
                         if not sleep_or_stop(max(1, wait)):
                             item["status"] = "queued"
                             store.save(state)
@@ -142,7 +142,7 @@ def command_run(args):
                     generic_failures += 1
                     if args.forever or generic_failures <= args.error_retries:
                         wait = min(args.error_max_wait, args.error_wait * (2 ** (generic_failures - 1)))
-                        print(f"↻ Error. Retry {generic_failures}/{args.error_retries if not args.forever else '∞'} in {wait}s.")
+                        print(f"[retry] Error. Retry {generic_failures}/{args.error_retries if not args.forever else 'unlimited'} in {wait}s.")
                         if not sleep_or_stop(max(1, wait)):
                             item["status"] = "queued"
                             store.save(state)
@@ -152,7 +152,7 @@ def command_run(args):
                     item["status"] = "failed"
                     item["finished_at"] = now_iso()
                     store.save(state)
-                    print(f"✗ {item['id']} failed after {generic_failures} non-limit errors.", file=sys.stderr)
+                    print(f"[failed] {item['id']} after {generic_failures} non-limit errors.", file=sys.stderr)
                     if not args.keep_going:
                         return 1
                     break
