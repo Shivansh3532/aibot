@@ -1,1 +1,17 @@
-.idea
+# Claude Queue runtime state
+.claude-queue/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
